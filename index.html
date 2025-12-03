@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Altavoltagem Seg. Eletrônica | Energia e Segurança</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#bd1923',
+                        dark: '#04060a',
+                        secondary: '#383578',
+                        highlight: '#079ad9',
+                        whatsapp: '#25D366',
+                    },
+                    fontFamily: {
+                        sans: ['Roboto', 'sans-serif'],
+                        display: ['Exo 2', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Estilos Globais e Animações */
+        body {
+            background-color: #04060a;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #04060a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #bd1923;
+            border-radius: 4px;
+        }
+
+        /* Efeito de Vidro */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-nav {
+            background: rgba(4, 6, 10, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Divisores de Seção SVG (Ondas) */
+        .custom-shape-divider-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            z-index: 20;
+        }
+        .custom-shape-divider-bottom svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 120px;
+        }
+        @media (max-width: 768px) {
+            .custom-shape-divider-bottom svg {
+                height: 80px; /* Ajuste para mobile */
+            }
+        }
+
+        .custom-shape-divider-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+        .custom-shape-divider-top svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 80px;
+        }
+
+        /* Animação de Pulso Elétrico */
+        @keyframes electric-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(189, 25, 35, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(189, 25, 35, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(189, 25, 35, 0); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .logo-glow {
+            filter: drop-shadow(0 0 15px rgba(189, 25, 35, 0.5));
+            transition: filter 0.3s ease;
+        }
+        .logo-glow:hover {
+            filter: drop-shadow(0 0 30px rgba(7, 154, 217, 0.8));
+        }
+
+        /* Classes para Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Máscara para imagens "orgânicas" */
+        .blob-shape {
+            border-radius: 64% 36% 28% 72% / 65% 44% 56% 35%;
+            overflow: hidden;
+            transition: border-radius 0.5s ease;
+        }
+        .blob-shape:hover {
+            border-radius: 40% 60% 60% 40% / 40% 60% 40% 60%;
+        }
+
+        /* Botão WhatsApp Pulsante */
+        .whatsapp-pulse {
+            animation: electric-pulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-primary selection:text-white">
+
+    <!-- Navbar Flutuante -->
+    <nav class="glass-nav fixed w-full z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#home" class="flex items-center gap-2 group">
+                <img src="img/logo2.png" alt="Altavoltagem" class="h-10 md:h-12 w-auto group-hover:brightness-110 transition">
+                <span class="text-lg md:text-xl font-display font-bold tracking-wider text-white hidden sm:block"></span>
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-8 text-xs lg:text-sm font-medium uppercase tracking-wide">
+                <a href="#sobre" class="text-gray-300 hover:text-highlight transition-colors relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-highlight after:left-0 after:-bottom-1 after:transition-all hover:after:w-full">História</a>
+                <a href="#produtos" class="text-gray-300 hover:text-highlight transition-colors relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-highlight after:left-0 after:-bottom-1 after:transition-all hover:after:w-full">Produtos</a>
+                <a href="#diferenciais" class="text-gray-300 hover:text-highlight transition-colors relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-highlight after:left-0 after:-bottom-1 after:transition-all hover:after:w-full">Vantagens</a>
+                <a href="#projetos" class="text-gray-300 hover:text-highlight transition-colors relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-highlight after:left-0 after:-bottom-1 after:transition-all hover:after:w-full">Projetos</a>
+                <a href="#contato" class="bg-gradient-to-r from-primary to-red-700 px-6 py-2 rounded-full text-white shadow-lg hover:shadow-red-900/50 hover:scale-105 transition-all transform">Contato</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-button" class="md:hidden text-white focus:outline-none p-2">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden absolute w-full bg-dark/95 backdrop-blur-xl border-b border-gray-800">
+            <div class="flex flex-col p-6 space-y-4 text-center">
+                <a href="#home" class="text-white hover:text-highlight py-2">Início</a>
+                <a href="#sobre" class="text-white hover:text-highlight py-2">História</a>
+                <a href="#produtos" class="text-white hover:text-highlight py-2">Produtos</a>
+                <a href="#projetos" class="text-white hover:text-highlight py-2">Projetos</a>
+                <a href="#contato" class="bg-primary px-4 py-3 rounded-lg text-white font-bold">Contato</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION: Ajustada para Mobile e Desktop -->
+    <header id="home" class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-dark pt-16 md:pt-0">
+        <!-- Canvas para Efeito de Partículas -->
+        <canvas id="hero-canvas" class="absolute inset-0 w-full h-full z-0 opacity-40"></canvas>
+        
+        <!-- Overlay Gradiente -->
+        <div class="absolute inset-0 bg-gradient-radial from-transparent to-dark z-10 pointer-events-none"></div>
+
+        <!-- Conteúdo Hero -->
+        <div class="relative z-30 text-center px-4 max-w-5xl mx-auto flex flex-col items-center justify-center h-full pb-20 md:pb-0">
+            
+            <!-- Logo Central com brilho -->
+            <div class="mb-6 md:mb-8 relative animate-float">
+                <div class="absolute inset-0 bg-primary rounded-full blur-[60px] md:blur-[80px] opacity-20 animate-pulse"></div>
+                <img src="img/logo2.png" alt="Logo Altavoltagem" class="h-32 md:h-64 w-auto relative z-10 logo-glow">
+            </div>
+
+            <h1 class="text-4xl md:text-7xl font-display font-black text-white mb-4 leading-tight tracking-tight drop-shadow-lg reveal">
+                SUA SEGURANÇA EM<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-red-500 to-highlight">ALTA VOLTAGEM</span>
+            </h1>
+
+            <p class="text-base md:text-2xl text-gray-300 mb-8 md:mb-10 max-w-3xl reveal delay-100 font-light px-2">
+                Soluções completas em Segurança Eletrônica, Automação e Energia Solar.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 reveal delay-200 w-full sm:w-auto px-6 sm:px-0">
+                <a href="https://wa.me/5548999031945" target="_blank" class="group relative px-8 py-4 bg-transparent overflow-hidden rounded-full shadow-lg border border-primary text-white font-bold transition-all hover:shadow-[0_0_20px_rgba(189,25,35,0.6)] flex justify-center items-center">
+                    <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-primary rounded-full group-hover:w-96 group-hover:h-96 -ml-2 -mt-2"></span>
+                    <span class="relative flex items-center gap-2">
+                        <i class="fab fa-whatsapp text-xl"></i> Fale Conosco
+                    </span>
+                </a>
+                <a href="#produtos" class="px-8 py-4 bg-gray-800/50 hover:bg-gray-700 backdrop-blur text-white rounded-full font-bold transition duration-300 flex items-center justify-center gap-2">
+                    Nossos Serviços <i class="fas fa-arrow-down animate-bounce text-xs"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Divisor de Onda Inferior -->
+        <div class="custom-shape-divider-bottom fill-gray-100">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
+                <path d="M0,0V15.81C13,36.92,47.64,50.79,98.28,51,135.25,51.15,225.46,16.27,249.09,10.05,297.89-2.79,350.28,2.83,397.77,17,453.61,33.65,510.71,51.17,566.07,49.19,679.52,45.14,756,6.13,858.61,46.06,948.55,81.07,984.7,69.54,1015,58.74,1082,34.8,1146.68,14.65,1200,42.47V0Z" opacity=".5" class="shape-fill"></path>
+                <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </header>
+
+    <!-- SECTION SOBRE: Texto Original Restaurado -->
+    <section id="sobre" class="py-24 bg-gray-100 relative z-20 text-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+                
+                <div class="lg:w-5/12 reveal relative flex justify-center">
+                    <!-- Elementos decorativos atrás da foto -->
+                    <div class="absolute -top-10 -left-10 w-32 h-32 bg-secondary/20 rounded-full blur-xl hidden md:block"></div>
+                    <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-primary/20 rounded-full blur-xl hidden md:block"></div>
+                    
+                    <div class="w-80 h-80 md:w-full md:h-auto max-w-sm shadow-2xl blob-shape border-4 border-white relative z-10 overflow-hidden group">
+                         <img src="img/foto empresario.jpeg" onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'" alt="Cristiano Santos" class="w-full h-full object-cover transform transition duration-700 group-hover:scale-110">
+                    </div>
+                </div>
+                
+                <div class="lg:w-7/12 reveal delay-100 text-center lg:text-left">
+                    <h4 class="text-primary font-bold uppercase tracking-widest text-sm mb-2">Quem Somos</h4>
+                    <h2 class="text-3xl md:text-5xl font-display font-bold text-dark mb-6 leading-tight">
+                        Minha Jornada, <br>Nosso Compromisso
+                    </h2>
+                    
+                    <div class="text-lg text-gray-700 leading-relaxed space-y-4">
+                        <p class="font-semibold text-primary italic text-xl">
+                            "Mais do que um eletrotécnico, eu sou um guardião da tranquilidade em Laguna."
+                        </p>
+                        <p>
+                            Meu nome é <strong>Cristiano Santos de Souza</strong>. Sou pai da Celina, esposo da Sabrina, e natural de Criciúma, mas meu coração e meu lar estão em <strong>Laguna</strong>, uma cidade que amo e na qual depositei todo o meu trabalho.
+                        </p>
+                        <p>
+                            Há 14 anos, iniciei minha jornada na segurança eletrônica com um propósito simples: <strong>oferecer soluções idôneas e responsáveis</strong>, algo raro em um mercado cheio de promessas vazias. Trabalhar com amor e dedicação é a minha marca registrada, garantindo que a sua família e o seu patrimônio estejam sempre protegidos.
+                        </p>
+
+                        <h3 class="text-xl font-bold text-secondary mt-6">Expertise e Legado</h3>
+                        <p>
+                            Formado em Eletrotécnica pela SATC e com <strong>14 anos de experiência</strong>, minha base técnica é sólida. Dediquei anos a cursos práticos de <strong>Energia Solar, Alarmes de Incêndio e Intrusão, SPDA</strong> e CFTV avançado. Já liderei a instalação de <strong>mais de 60 projetos de Energia Solar</strong>.
+                        </p>
+                        <p>
+                            A <strong>Altavoltagem</strong> e a Amurel Terraplanagem nasceram desse espírito empreendedor. Empreender, para mim, é provar que é possível construir um negócio de sucesso através do trabalho honesto.
+                        </p>
+
+                         <h3 class="text-xl font-bold text-secondary mt-6">Compromisso Comunitário</h3>
+                        <p>
+                            Meu compromisso vai além do trabalho. Sou um <strong>Bombeiro Comunitário atuante</strong>, dedicado a servir e proteger. Na Altavoltagem, você contrata a responsabilidade de quem realmente se importa com o futuro de Laguna.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION SERVIÇOS: Lista Completa (9 Itens) -->
+    <section id="produtos" class="py-24 bg-dark relative overflow-hidden">
+        <!-- Fundo Decorativo -->
+        <div class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-secondary/20 to-transparent pointer-events-none"></div>
+
+        <div class="custom-shape-divider-top fill-gray-100">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10 pt-16">
+            <div class="text-center mb-16 reveal">
+                <span class="text-highlight font-bold uppercase tracking-wider">Nossas Soluções</span>
+                <h2 class="text-4xl md:text-5xl font-display font-bold text-white mt-2">Proteção e Tecnologia Integrada</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- 1. Portões -->
+                <div class="glass-panel p-6 rounded-2xl hover:bg-gray-800/50 transition-all duration-300 group hover:-translate-y-2 border-l-4 border-primary reveal">
+                    <i class="fas fa-dungeon text-4xl text-primary mb-4 block group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">Portões Eletrônicos</h3>
+                    <p class="text-gray-400 text-sm">Instalação, manutenção e motores de alto desempenho para seu acesso rápido e seguro.</p>
+                </div>
+
+                <!-- 2. Para Raios -->
+                <div class="glass-panel p-6 rounded-2xl hover:bg-gray-800/50 transition-all duration-300 group hover:-translate-y-2 border-l-4 border-highlight reveal">
+                    <i class="fas fa-cloud-bolt text-4xl text-highlight mb-4 block group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">Para-Raios (SPDA)</h3>
+                    <p class="text-gray-400 text-sm">Proteção completa contra descargas atmosféricas para estruturas residenciais, comerciais e industriais.</p>
+                </div>
+
+                <!-- 3. Energia Solar -->
+                <div class="glass-panel p-6 rounded-2xl hover:bg-gray-800/50 transition-all duration-300 group hover:-translate-y-2 border-l-4 border-secondary reveal">
+                    <i class="fas fa-solar-panel text-4xl text-secondary mb-4 block group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">Energia Solar</h3>
+                    <p class="text-gray-400 text-sm">Projetos on-grid e off-grid, economia na conta de luz e sustentabilidade.</p>
+                </div>
+
+                <!-- 4. CFTV -->
+                <div class="glass-panel p-6 rounded-2xl hover:bg-gray-800/50 transition-all duration-300 group hover:-translate-y-2 border-l-4 border-primary reveal">
+                    <i class="fas fa-video text-4xl text-primary mb-4 block group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">Câmeras CFTV</h3>
+                    <p class="text-gray-400 text-sm">Monitoramento 24h, acesso remoto pelo celular e alta resolução (Full HD/4K).</p>
+                </div>
+
+                <!-- 5. Automação -->
+                <div class="glass-panel p-6 rounded-2xl hover:bg-gray-800/50 transition-all duration-300 group hover:-translate-y-2 border-l-4 border-highlight reveal">
+                    <i class="fas fa-mobile-alt text-4xl text-highlight mb-4 block group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">Automação</h3>
+                    <p class="text-gray-400 text-sm">Controle de iluminação, climatização e acesso (Residencial e Empresarial) na palma da mão.</p>
+                </div>
+
+                <!-- 6. Interfonia -->
+                <div class="glass-panel p-6 rounded-2xl hover:bg-gray-800/50 transition-all duration-300 group hover:-translate-y-2 border-l-4 border-secondary reveal">
+                    <i class="fas fa-phone-alt text-4xl text-secondary mb-4 block group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">Interfonia</h3>
+                    <p class="text-gray-400 text-sm">Sistemas de comunicação eficientes e claros para condomínios e residências.</p>
+                </div>
+
+                <!-- 7. Cerca Elétrica -->
+                <div class="glass-panel p-6 rounded-2xl hover:bg-gray-800/50 transition-all duration-300 group hover:-translate-y-2 border-l-4 border-primary reveal">
+                    <i class="fas fa-bolt text-4xl text-primary mb-4 block group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">Cerca Elétrica</h3>
+                    <p class="text-gray-400 text-sm">Proteção perimetral robusta e homologada, inibindo invasões com segurança.</p>
+                </div>
+
+                <!-- 8. Alarmes -->
+                <div class="glass-panel p-6 rounded-2xl hover:bg-gray-800/50 transition-all duration-300 group hover:-translate-y-2 border-l-4 border-highlight reveal">
+                    <i class="fas fa-bell text-4xl text-highlight mb-4 block group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">Alarmes Monitorados</h3>
+                    <p class="text-gray-400 text-sm">Sensores de presença inteligentes e resposta rápida em casos de intrusão.</p>
+                </div>
+
+                <!-- 9. Alta Voltagem -->
+                <div class="glass-panel p-6 rounded-2xl hover:bg-gray-800/50 transition-all duration-300 group hover:-translate-y-2 border-l-4 border-secondary reveal">
+                    <i class="fas fa-tools text-4xl text-secondary mb-4 block group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">Manutenção & Alta Voltagem</h3>
+                    <p class="text-gray-400 text-sm">Soluções especializadas em sistemas de alta potência e manutenção preventiva.</p>
+                </div>
+
+            </div>
+             <div class="text-center mt-12">
+                <a href="https://wa.me/5548999031945" target="_blank" class="bg-secondary hover:bg-white hover:text-dark text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300">
+                    Solicitar Orçamento
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION DIFERENCIAIS -->
+    <section id="diferenciais" class="py-24 bg-gradient-to-br from-secondary to-dark text-white relative transform -skew-y-3 origin-top-left mt-[-50px] z-20 shadow-2xl">
+        <div class="transform skew-y-3 container mx-auto px-6 pt-10">
+            <h2 class="text-4xl font-display font-bold text-center mb-16">Por que somos <span class="text-highlight">Diferentes?</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="text-center group reveal">
+                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-4 group-hover:bg-highlight transition duration-500">
+                        <i class="fas fa-medal text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Experiência</h3>
+                    <p class="text-gray-300 text-sm">14 anos de mercado com equipe técnica certificada.</p>
+                </div>
+                <div class="text-center group reveal delay-100">
+                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary transition duration-500">
+                        <i class="fas fa-stopwatch text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Atendimento Rápido</h3>
+                    <p class="text-gray-300 text-sm">Suporte ágil e eficiente para suas necessidades.</p>
+                </div>
+                <div class="text-center group reveal delay-200">
+                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-4 group-hover:bg-highlight transition duration-500">
+                        <i class="fas fa-layer-group text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Soluções Integradas</h3>
+                    <p class="text-gray-300 text-sm">Energia, Segurança e Automação em um só lugar.</p>
+                </div>
+                <div class="text-center group reveal delay-300">
+                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary transition duration-500">
+                        <i class="fas fa-microchip text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Tecnologia de Ponta</h3>
+                    <p class="text-gray-300 text-sm">Equipamentos modernos e confiáveis.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION PROJETOS: Lista Completa (9 Itens) -->
+    <section id="projetos" class="py-32 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-display font-bold text-dark text-center mb-12">Nossos Projetos: Qualidade Comprovada</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- 1. Portão -->
+                <div class="h-64 relative group overflow-hidden rounded-2xl shadow-lg reveal">
+                    <img src="img/portao_eletrico_2.jpeg" onerror="this.src='https://images.unsplash.com/photo-1622646876127-14227914972e?auto=format&fit=crop&w=400&q=80'" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-dark/60 opacity-100 md:opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                        <span class="text-white font-bold text-lg border-2 border-primary px-4 py-2 rounded-full">Portão Eletrônico</span>
+                    </div>
+                </div>
+
+                <!-- 2. CFTV -->
+                <div class="h-64 relative group overflow-hidden rounded-2xl shadow-lg reveal">
+                    <img src="img/monitoramente_1.jpeg" onerror="this.src='https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=400&q=80'" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-dark/60 opacity-100 md:opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                        <span class="text-white font-bold text-lg border-2 border-highlight px-4 py-2 rounded-full">Monitoramento CFTV</span>
+                    </div>
+                </div>
+
+                <!-- 3. Solar -->
+                <div class="h-64 relative group overflow-hidden rounded-2xl shadow-lg reveal">
+                    <img src="img/placa_solar_1.jpeg" onerror="this.src='https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=800&q=80'" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-dark/60 opacity-100 md:opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                        <span class="text-white font-bold text-lg border-2 border-secondary px-4 py-2 rounded-full">Energia Solar</span>
+                    </div>
+                </div>
+
+                <!-- 4. Acesso -->
+                <div class="h-64 relative group overflow-hidden rounded-2xl shadow-lg reveal">
+                    <img src="img/controle_de_acesso_1.jpeg" onerror="this.src='https://images.unsplash.com/photo-1616423640778-28d1b53229bd?auto=format&fit=crop&w=400&q=80'" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-dark/60 opacity-100 md:opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                        <span class="text-white font-bold text-lg border-2 border-primary px-4 py-2 rounded-full">Controle de Acesso</span>
+                    </div>
+                </div>
+
+                <!-- 5. Alarme -->
+                <div class="h-64 relative group overflow-hidden rounded-2xl shadow-lg reveal">
+                    <img src="img/painel_alarme.jpeg" onerror="this.src='https://images.unsplash.com/photo-1558002038-109177381792?auto=format&fit=crop&w=800&q=80'" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-dark/60 opacity-100 md:opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                        <span class="text-white font-bold text-lg border-2 border-highlight px-4 py-2 rounded-full">Sistemas Preventivos</span>
+                    </div>
+                </div>
+
+                <!-- 6. Cerca -->
+                <div class="h-64 relative group overflow-hidden rounded-2xl shadow-lg reveal">
+                    <img src="img/cerca-eletrica.jpg" onerror="this.src='https://images.unsplash.com/photo-1590240938637-259837a7019f?auto=format&fit=crop&w=400&q=80'" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-dark/60 opacity-100 md:opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                        <span class="text-white font-bold text-lg border-2 border-secondary px-4 py-2 rounded-full">Cerca Elétrica</span>
+                    </div>
+                </div>
+
+                <!-- 7. Interfone -->
+                <div class="h-64 relative group overflow-hidden rounded-2xl shadow-lg reveal">
+                    <img src="img/interfone.jpg" onerror="this.src='https://images.unsplash.com/photo-1555437648-2615a77b7524?auto=format&fit=crop&w=400&q=80'" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-dark/60 opacity-100 md:opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                        <span class="text-white font-bold text-lg border-2 border-primary px-4 py-2 rounded-full">Interfone</span>
+                    </div>
+                </div>
+
+                <!-- 8. Para-raios -->
+                <div class="h-64 relative group overflow-hidden rounded-2xl shadow-lg reveal">
+                    <img src="img/pararaio.png" onerror="this.src='https://images.unsplash.com/photo-1516675302207-e7373f1396b7?auto=format&fit=crop&w=400&q=80'" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-dark/60 opacity-100 md:opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                        <span class="text-white font-bold text-lg border-2 border-highlight px-4 py-2 rounded-full">Para-raios</span>
+                    </div>
+                </div>
+
+                <!-- 9. Serviços -->
+                <div class="h-64 relative group overflow-hidden rounded-2xl shadow-lg reveal">
+                    <img src="img/servicos_2.png" onerror="this.src='https://images.unsplash.com/photo-1581092921461-eab62e97a782?auto=format&fit=crop&w=400&q=80'" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-dark/60 opacity-100 md:opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                        <span class="text-white font-bold text-lg border-2 border-secondary px-4 py-2 rounded-full">Manutenção</span>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="https://wa.me/5548999031945" target="_blank" class="text-primary hover:text-red-700 font-semibold transition duration-300 text-lg">
+                    Solicite uma visita técnica agora →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEPOIMENTOS: Design Moderno (10 Itens) -->
+    <section class="py-24 bg-dark text-white relative">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-highlight to-secondary"></div>
+        
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16">Clientes Satisfeitos</h2>
+            
+            <div class="flex overflow-x-auto gap-6 pb-8 snap-x hide-scroll" id="reviews-container">
+                <!-- Review 1: Portões e Câmeras (Primary) -->
+                <div class="min-w-[300px] md:min-w-[400px] bg-white/5 p-8 rounded-2xl border border-white/10 snap-center">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-sm flex gap-1">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic mb-6">"Instalaram nosso Portão Eletrônico e as Câmeras em tempo recorde. Serviço limpo e o sistema funciona perfeitamente! Nota 10!"</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-red-600 flex items-center justify-center font-bold">M</div>
+                        <div>
+                            <p class="font-bold">Maria S.</p>
+                            <p class="text-xs text-gray-500">Proprietária</p>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Review 2: Energia Solar (Highlight) -->
+                 <div class="min-w-[300px] md:min-w-[400px] bg-white/5 p-8 rounded-2xl border border-white/10 snap-center">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-sm flex gap-1">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic mb-6">"O projeto de Energia Solar superou as expectativas. A economia mensal é real e o atendimento foi impecável."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-highlight to-blue-600 flex items-center justify-center font-bold">J</div>
+                        <div>
+                            <p class="font-bold">João P.</p>
+                            <p class="text-xs text-gray-500">Empresário</p>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Review 3: Alarme e Cerca (Secondary) -->
+                 <div class="min-w-[300px] md:min-w-[400px] bg-white/5 p-8 rounded-2xl border border-white/10 snap-center">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-sm flex gap-1">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic mb-6">"Sinto-me muito mais seguro em casa agora com o alarme e a cerca elétrica. Recomendo a Altavoltagem!"</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-secondary to-purple-600 flex items-center justify-center font-bold">C</div>
+                        <div>
+                            <p class="font-bold">Carlos R.</p>
+                            <p class="text-xs text-gray-500">Morador</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 4: Automação (Primary) -->
+                <div class="min-w-[300px] md:min-w-[400px] bg-white/5 p-8 rounded-2xl border border-white/10 snap-center">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-sm flex gap-1">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic mb-6">"A automação residencial é fantástica, especialmente o controle de iluminação. Profissionais muito atenciosos e detalhistas."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-primary flex items-center justify-center font-bold">A</div>
+                        <div>
+                            <p class="font-bold">Ana L.</p>
+                            <p class="text-xs text-gray-500">Arquiteta</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 5: Manutenção (Highlight) -->
+                <div class="min-w-[300px] md:min-w-[400px] bg-white/5 p-8 rounded-2xl border border-white/10 snap-center">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-sm flex gap-1">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic mb-6">"Tivemos um problema de pane elétrica e o atendimento da Altavoltagem foi imediato. Serviço de manutenção de alta qualidade."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-highlight flex items-center justify-center font-bold">T</div>
+                        <div>
+                            <p class="font-bold">Thiago V.</p>
+                            <p class="text-xs text-gray-500">Comerciante</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Review 6: SPDA (Secondary) -->
+                <div class="min-w-[300px] md:min-w-[400px] bg-white/5 p-8 rounded-2xl border border-white/10 snap-center">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-sm flex gap-1">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic mb-6">"A instalação do SPDA no condomínio foi essencial. Profissionalismo e segurança em primeiro lugar, conforme a norma técnica."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-secondary flex items-center justify-center font-bold">L</div>
+                        <div>
+                            <p class="font-bold">Lúcia F.</p>
+                            <p class="text-xs text-gray-500">Síndica</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 7: Interfonia (Primary) -->
+                <div class="min-w-[300px] md:min-w-[400px] bg-white/5 p-8 rounded-2xl border border-white/10 snap-center">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-sm flex gap-1">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic mb-6">"Trocamos todo o sistema de interfonia. Ficou muito mais moderno e a comunicação está cristalina. Ótimo custo-benefício."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-red-400 flex items-center justify-center font-bold">P</div>
+                        <div>
+                            <p class="font-bold">Paulo H.</p>
+                            <p class="text-xs text-gray-500">Administrador</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 8: Câmeras Comerciais (Highlight) -->
+                <div class="min-w-[300px] md:min-w-[400px] bg-white/5 p-8 rounded-2xl border border-white/10 snap-center">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-sm flex gap-1">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic mb-6">"As câmeras 4K que instalamos na loja mudaram nosso nível de segurança. As imagens são inacreditáveis de nítidas. Recomendo o investimento!"</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-highlight to-blue-400 flex items-center justify-center font-bold">R</div>
+                        <div>
+                            <p class="font-bold">Roberta M.</p>
+                            <p class="text-xs text-gray-500">Gerente</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 9: Painel de Alarme (Secondary) -->
+                <div class="min-w-[300px] md:min-w-[400px] bg-white/5 p-8 rounded-2xl border border-white/10 snap-center">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-sm flex gap-1">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic mb-6">"O painel de alarme com notificação no celular é muito prático. Gosto da transparência e da honestidade do Cristiano."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-secondary to-purple-400 flex items-center justify-center font-bold">D</div>
+                        <div>
+                            <p class="font-bold">Daniel B.</p>
+                            <p class="text-xs text-gray-500">Residente</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 10: Integração de Sistemas (Primary) -->
+                <div class="min-w-[300px] md:min-w-[400px] bg-white/5 p-8 rounded-2xl border border-white/10 snap-center">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-sm flex gap-1">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic mb-6">"A integração de todos os sistemas (solar, cerca e portão) funcionou perfeitamente. A equipe é altamente técnica e profissional."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-red-600 flex items-center justify-center font-bold">G</div>
+                        <div>
+                            <p class="font-bold">Gustavo Z.</p>
+                            <p class="text-xs text-gray-500">Investidor</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION CONTATO -->
+    <section id="contato" class="relative py-24 bg-gray-100">
+        <!-- Divisor SVG Invertido -->
+        <div class="absolute top-0 left-0 w-full overflow-hidden leading-none rotate-180">
+            <svg class="relative block w-[calc(100%+1.3px)] h-[60px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M1200 120L0 16.48V0h1200v120z" class="fill-dark"></path>
+            </svg>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+                
+                <div class="lg:w-1/3 bg-dark text-white p-12 flex flex-col justify-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[80px] -mr-16 -mt-16"></div>
+                    
+                    <h3 class="text-3xl font-bold mb-6 relative z-10">Vamos conversar?</h3>
+                    <p class="text-gray-400 mb-8 relative z-10">Entre em contato hoje mesmo e solicite um orçamento gratuito.</p>
+                    
+                    <div class="space-y-6 relative z-10">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary flex-shrink-0">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">WhatsApp</p>
+                                <a href="https://wa.me/5548999031945" class="text-lg font-bold hover:text-primary transition">(48) 99903-1945</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary flex-shrink-0">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Endereço</p>
+                                <p class="text-lg font-bold">Av. João Pinho, 507<br>Laguna, SC</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="https://wa.me/5548999031945" class="mt-10 bg-whatsapp text-white text-center py-3 rounded-xl font-bold hover:bg-green-600 transition shadow-lg flex items-center justify-center gap-2">
+                        <i class="fab fa-whatsapp"></i> Iniciar Conversa
+                    </a>
+                </div>
+                
+                <div class="lg:w-2/3 h-[400px] lg:h-auto relative">
+                     <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3489.263842183204!2d-48.81335962534568!3d-28.47353987575305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x952179836965d1fd%3A0xc3f6d70889c20a9a!2sAv.%20Jo%C3%A3o%20Pinho%2C%20507%20-%20Laguna%2C%20SC%2C%2088790-000!5e0!3m2!1spt-BR!2sbr!4v1701198592398!5m2!1spt-BR!2sbr" 
+                        class="absolute inset-0 w-full h-full"
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark border-t border-gray-800 py-12 text-center text-gray-500 text-sm">
+        <div class="container mx-auto px-6 flex flex-col items-center">
+            <img src="img/logo2.png" alt="Altavoltagem" class="h-12 w-auto mb-6 opacity-50 grayscale hover:grayscale-0 transition duration-500">
+            <p class="mb-2">&copy; 2025 Altavoltagem Segurança Eletrônica. Todos os direitos reservados.</p>
+            <p>Feito com energia ⚡ e tecnologia.</p>
+        </div>
+    </footer>
+
+    <!-- Botão Flutuante WhatsApp -->
+    <a href="https://wa.me/5548999031945" target="_blank" class="fixed bottom-6 right-6 z-50 whatsapp-pulse">
+        <div class="bg-whatsapp w-16 h-16 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition duration-300 text-white text-3xl">
+            <i class="fab fa-whatsapp"></i>
+        </div>
+    </a>
+
+    <!-- JAVASCRIPT: Efeitos e Lógica -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. MENU MOBILE ---
+            const menuButton = document.getElementById('menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            menuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // --- 2. SCROLL REVEAL (Animação ao rolar) ---
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const revealOnScroll = () => {
+                const windowHeight = window.innerHeight;
+                const elementVisible = 150;
+
+                reveals.forEach((reveal) => {
+                    const elementTop = reveal.getBoundingClientRect().top;
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveal.classList.add('active');
+                    }
+                });
+            };
+            window.addEventListener('scroll', revealOnScroll);
+            revealOnScroll(); // Trigger inicial
+
+            // --- 3. HERO CANVAS PARTICLE EFFECT (Efeito Elétrico) ---
+            const canvas = document.getElementById('hero-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 1;
+                    this.vy = (Math.random() - 0.5) * 1;
+                    this.size = Math.random() * 2;
+                    this.color = Math.random() > 0.5 ? '#bd1923' : '#079ad9'; // Vermelho ou Azul
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    // Rebater nas bordas
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                }
+            }
+
+            // Criar partículas
+            for (let i = 0; i < 60; i++) {
+                particles.push(new Particle());
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Conectar partículas próximas (Efeito de Rede/Eletricidade)
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+
+                    for (let j = i; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < 150) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance / 150})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+
+            // --- 4. NAVBAR BLUR ON SCROLL ---
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-lg');
+                } else {
+                    navbar.classList.remove('shadow-lg');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
